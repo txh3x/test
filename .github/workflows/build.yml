@@ -27,4 +27,6 @@ jobs:
         run: sudo apt install gcc
       - name: Checking GCC version
         run: gcc --version
+      - name: Compiling Project ${{ github.repository }}
+        run: ls ${{ github.workspace }}
   
