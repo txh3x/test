@@ -19,14 +19,48 @@ on: [push]
 #       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 jobs:
-  Print-API-KEY:
+  FirstJob:
     name: Setting Up Machine
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout 
+        uses:  actions/checkout@v4
+
       - name: Installing gcc 
         run: sudo apt install gcc
+
       - name: Checking GCC version
         run: gcc --version
+
+      - name: Checking The Files
+        run: ls -la ${{ github.workspace }}
+
+      - name: Cleaning The Previous Files
+        run: rm -rf test/bin/
+
       - name: Compiling Project ${{ github.repository }}
-        run: ls ${{ github.workspace }}
+        run: gcc ${{ github.workspace }}/src/main.c -o ${{ github.workspace }}/bin/main
+
+      - name: Checking The Files
+        run: ls -la ${{ github.workspace }}/bin
+
+      - name: Upload The Code 
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts 
+          path: .upload
+      
+  SecondJob: 
+    name: New Job
+    runs-on: ubuntu-latest
+    needs: FirstJob
+
+    steps:
+        - name: Download Artifacts
+          uses: actions/download-artifact@v4
+          with:
+            name: logs 
+
   
+
