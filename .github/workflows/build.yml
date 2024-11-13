@@ -52,11 +52,11 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v4
           
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: artifacts  
-          path: ${{ github.workspace }}/.build/artifacts
+      # - name: Download Artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: artifacts  
+      #     path: ${{ github.workspace }}/.build/artifacts
         
       - name: Display structure of downloaded files
         run: ls -R ${{ github.workspace }}/.build/artifacts
