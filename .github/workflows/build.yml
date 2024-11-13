@@ -51,8 +51,8 @@ jobs:
         uses: TheDoctor0/zip-release@main
         with:
           type: 'zip'
+          directory: ${{ github.workspace }}/bin/
           filename: app.zip
-          directory: ${{ github.workspace }}/bin/main
           exclusions: '*.git* /*node_modules/* .editorconfig'
       
       - name: Create Release 
