@@ -62,3 +62,32 @@ jobs:
         run: ls -R ${{ github.workspace }}
       
       - run: echo "This job's status is ${{ job.status }}."
+      
+      - name: Archive Release 
+        uses: TheDoctor0/zip-release@main
+        with:
+          type: 'zip'
+          filename: 'release.zip'
+          exclusions: '*.git* /*node_modules/* .editorconfig'
+      
+      - name: Create-Release 
+        id: create-new-release
+        uses: actions/create-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+           tag_name: ${{ github.run_number }}
+           release_name: Release ${{ github.run_number }}
+
+      - name: Upload-Release 
+        id: upload-release-assest
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-new-release.outputs.upload_url }} 
+          asset_path: ./release.zip
+          asset_name: release.zip
+          asset_content_type: application/zip
+
+
