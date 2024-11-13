@@ -1,5 +1,5 @@
 name: Github Action 
-run-name: ${{ github.actor_id }} printing Random API KEY 
+run-name: ${{ github.actor }} printing Random API KEY 
 on: [push]
 
 # jobs:
