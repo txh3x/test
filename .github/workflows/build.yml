@@ -2,33 +2,17 @@ name: Github Action
 run-name: ${{ github.actor }} Installing Tools
 on: [push]
 
-# jobs:
-#  Explore-GitHub-Actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-
-#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-#       - name: Check out repository code
-#         uses: actions/checkout@v4 
-#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-#       - name: List files in the repository
-#         run: ls ${{ github.workspace }}
-#       - run: echo "🍏 This job's status is ${{ job.status }}."
-
 jobs:
   FirstJob:
-    name: Setting Up Machine
+    name: ${{ github.event_name }} -> Setting Up Machine 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout 
-        uses:  actions/checkout@v4
+        uses: actions/checkout@v4
 
-      - name: Installing gcc 
-        run: sudo apt install gcc
+      - name: Installing gcc on ${{ runner.os }}
+        run: sudo apt install -y gcc
 
       - name: Checking GCC version
         run: gcc --version
@@ -39,7 +23,7 @@ jobs:
       - name: Cleaning The Previous Files
         run: rm -rf test/bin/
 
-      - name: Compiling Project ${{ github.repository }}
+      - name: Compiling Project ${{ github.repository }} at branch ${{ github.ref }}
         run: gcc ${{ github.workspace }}/src/main.c -o ${{ github.workspace }}/bin/main
 
       - name: Checking The Files
@@ -48,23 +32,27 @@ jobs:
       - name: Upload The Code 
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts 
-          path: ${{ github.workspace }}/.github/workflows/.upload
-      
+          name: artifacts  # Artifact name used here
+          path: ./.build/artifacts
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+          
   SecondJob: 
     name: New Job
     runs-on: ubuntu-latest
     needs: FirstJob
 
     steps:
-        - name: Checkout 
-          uses:  actions/checkout@v4
+      - name: Checkout 
+        uses: actions/checkout@v4
           
-        - name: Download Artifacts
-          uses: actions/download-artifact@v4
-          with:
-            name: my-artifact
-        - name: Display structure of downloaded files
-          run: ls -R
-  
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: artifacts  # Match the artifact name used in FirstJob
 
+      - name: Display structure of downloaded files
+        run: ls -R
+      
+      - run: echo "This job's status is ${{ job.status }}."
