@@ -19,11 +19,10 @@ on: [push]
 #       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 jobs:
- Print-API-KEY:
-  runs-on: ubuntu-latest 
-  steps:
-    - name: Retrieve secret
-    env:
-      super_secret: ${{ secrets.API_KEY }}
-    run: |
-      example-command "$super_secret"
+  Print-API-KEY:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve secret
+        env:
+          super_secret: ${{ secrets.API_KEY }}
+        run: echo "$super_secret"
