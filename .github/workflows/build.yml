@@ -20,9 +20,11 @@ on: [push]
 
 jobs:
   Print-API-KEY:
+    name: Setting Up Machine
     runs-on: ubuntu-latest
     steps:
-      - name: Retrieve secret
-        env:
-          super_secret: ${{ secrets.API_KEY }}
-        run: printenv
+      - name: Installing gcc 
+        run: apt install gcc 
+      - name: Checking GCC version
+        run: gcc --version
+  
