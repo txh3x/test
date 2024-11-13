@@ -54,7 +54,10 @@ jobs:
           directory: ${{ github.workspace }}/bin/
           filename: app.zip
           exclusions: '*.git* /*node_modules/* .editorconfig'
-      
+
+      - name: Checking the Zipped Files
+        run: ls -la ${{ github.workspace }}/bin
+          
       - name: Create Release 
         id: create-new-release
         uses: actions/create-release@main
@@ -71,7 +74,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-new-release.outputs.upload_url }} 
-          asset_path: app.zip
+          asset_path: ./app.zip
           asset_name: app.zip
           asset_content_type: application/zip
 
