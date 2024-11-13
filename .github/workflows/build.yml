@@ -25,4 +25,4 @@ jobs:
       - name: Retrieve secret
         env:
           super_secret: ${{ secrets.API_KEY }}
-        run: echo "$super_secret"
+        run: echo "$env"
