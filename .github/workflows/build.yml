@@ -79,8 +79,27 @@ jobs:
           asset_content_type: application/zip
 
       - run: echo "This job's status is ${{ job.status }}."
+      
+      - name: Add GitHub Bot as Contributor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create a branch to add the GitHub bot
+          git checkout -b add-github-bot
 
-    
+          # Update CONTRIBUTORS file or similar to add the bot
+          echo "GitHub Bot <bot@example.com>" >> CONTRIBUTORS.txt
+          git add CONTRIBUTORS.txt
+          git commit -m "Add GitHub Bot as contributor"
+
+          # Push the new branch
+          git push origin add-github-bot
+
+          # Create the pull request
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/repos/${{ github.repository }}/pulls \
+               -d '{"title":"Add GitHub Bot as Contributor","head":"add-github-bot","base":"main","body":"Adding GitHub Bot as a contributor"}'
   # SecondJob: 
   #   name: New Job
   #   runs-on: ubuntu-latest
